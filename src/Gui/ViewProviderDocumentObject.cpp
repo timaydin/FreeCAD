@@ -703,6 +703,29 @@ bool ViewProviderDocumentObject::showInTree() const
     return ShowInTree.getValue();
 }
 
+QString ViewProviderDocumentObject::getToolTip() const
+{
+    App::DocumentObject* obj = getObject();
+    if (!obj) {
+        return {};
+    }
+
+    const QString label = QString::fromUtf8(obj->Label.getValue()).toHtmlEscaped();
+
+    QStringList lines;
+    lines << QStringLiteral("<b>%1</b>").arg(label);
+    lines << QObject::tr("Type: %1").arg(QString::fromLatin1(obj->getTypeId().getName()));
+    lines << QObject::tr("Internal name: %1").arg(QString::fromUtf8(obj->getNameInDocument()));
+
+    const char* description = obj->Label2.getValue();
+    if (description && description[0]) {
+        lines << QString();
+        lines << QString::fromUtf8(description).toHtmlEscaped();
+    }
+
+    return lines.join(QStringLiteral("<br/>"));
+}
+
 bool ViewProviderDocumentObject::getElementPicked(const SoPickedPoint* pp, std::string& subname) const
 {
     auto vector = getExtensionsDerivedFromType<Gui::ViewProviderExtension>();

@@ -93,6 +93,16 @@ public:
 
     bool showInTree() const override;
 
+    /** Tree tooltip showing the object's type, internal name and description.
+     *
+     * The base class returns an empty string, which means hovering any object
+     * other than a Sketch shows nothing and there is no way to discover an
+     * object's TypeId from the GUI at all. Types with similar icons - notably
+     * Part::Feature versus PartDesign::SubShapeBinder, which behave very
+     * differently on recompute - are otherwise indistinguishable in the tree.
+     */
+    QString getToolTip() const override;
+
     /// Get a list of TaskBoxes associated with this object
     void getTaskViewContent(std::vector<Gui::TaskView::TaskContent*>&) const override;
 
